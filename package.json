@@ -16,6 +16,7 @@
     "onoff": "^6.0.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "esbuild": "^0.13.2",
     "esbuild-runner": "^2.2.1",
     "ts-node": "^10.2.1",
