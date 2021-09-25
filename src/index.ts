@@ -1,6 +1,6 @@
 import { Relay } from "@modules/relay.module";
 
-const relay = new Relay(7);
+const relay = new Relay(24);
 
 (async () => {
   await relay.activate();
