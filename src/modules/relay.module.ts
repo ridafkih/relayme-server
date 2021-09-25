@@ -3,22 +3,6 @@ import { Gpio as GPIO, BinaryValue } from "onoff";
 export class Relay {
   constructor(number: number) {
     this.gpio = new GPIO(number, "out");
-    setTimeout(() => {
-      this.activate();
-      console.log("Activating...");
-    }, 1000);
-    setTimeout(() => {
-      this.activate();
-      console.log("DEActivating...");
-    }, 2000);
-    setTimeout(() => {
-      this.activate();
-      console.log("Activating...");
-    }, 3000);
-    setTimeout(() => {
-      this.activate();
-      console.log("DEActivating...");
-    }, 4000);
   }
 
   private gpio;
@@ -29,14 +13,10 @@ export class Relay {
    * @param time The amount of time in millseconds to activate that port.
    * @returns Whether the operation was permitted.
    */
-  timedToggle(time: number): Promise<Boolean> {
-    this.mutable = false;
-    return new Promise<Boolean>((resolve) => {
-      this.setActive(true, true);
-      setTimeout(resolve, time, this.setActive(false, true));
-    }).then((response) => {
-      this.mutable = true;
-      return response;
+  async timedToggle(time: number): Promise<Boolean> {
+    await this.activate();
+    return new Promise((resolve) => {
+      setTimeout(() => this.deactivate().then(resolve), time);
     });
   }
 
@@ -44,7 +24,7 @@ export class Relay {
    * Activates the GPIO port.
    * @returns Whether the operation was permitted.
    */
-  activate(): boolean {
+  async activate(): Promise<boolean> {
     if (!this.mutable) return false;
     return this.setActive(true);
   }
@@ -53,7 +33,7 @@ export class Relay {
    * Deactivates the GPIO port.
    * @returns Whether the operation was permitted.
    */
-  deactivate(): boolean {
+  async deactivate(): Promise<boolean> {
     if (!this.mutable) return false;
     return this.setActive(false);
   }
@@ -62,8 +42,8 @@ export class Relay {
    * Gets the state of the GPIO port.
    * @returns Whether or not the GPIO port is active.
    */
-  isActive(): boolean {
-    return !this.gpio.readSync();
+  isActive(): Promise<boolean> {
+    return this.gpio.read().then((value) => !!value);
   }
 
   /**
@@ -72,9 +52,9 @@ export class Relay {
    * @param override Whether to override under the condition that the state is immutable.
    * @returns Whether the operation was a success.
    */
-  setActive(state: boolean, override: boolean = false) {
+  async setActive(state: boolean, override: boolean = false) {
     if (!this.mutable && !override) return false;
-    this.gpio.writeSync(+state as BinaryValue);
+    await this.gpio.write(+state as BinaryValue);
     return true;
   }
 }
