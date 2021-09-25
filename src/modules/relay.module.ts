@@ -16,7 +16,8 @@ export class Relay {
   timedToggle(time: number): Promise<Boolean> {
     this.mutable = false;
     return new Promise<Boolean>((resolve) => {
-      setTimeout(resolve, time, this.deactivate());
+      this.setActive(true, true);
+      setTimeout(resolve, time, this.setActive(false, true));
     }).then((response) => {
       this.mutable = true;
       return response;
