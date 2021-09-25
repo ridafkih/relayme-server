@@ -5,8 +5,8 @@ export class Relay {
     this.gpio = new GPIO(number, "out");
   }
 
-  private gpio;
-  private mutable = true;
+  private gpio: GPIO;
+  private mutable: boolean = true;
 
   /**
    * Activate the GPIO port for a certain amount of time in millseconds.
@@ -56,5 +56,9 @@ export class Relay {
     if (!this.mutable && !override) return false;
     await this.gpio.write(+state as BinaryValue);
     return true;
+  }
+
+  dispose() {
+    this.gpio.unexport();
   }
 }
