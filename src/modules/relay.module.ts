@@ -3,6 +3,22 @@ import { Gpio as GPIO, BinaryValue } from "onoff";
 export class Relay {
   constructor(number: number) {
     this.gpio = new GPIO(number, "out");
+    setTimeout(() => {
+      this.activate();
+      console.log("Activating...");
+    }, 1000);
+    setTimeout(() => {
+      this.activate();
+      console.log("DEActivating...");
+    }, 2000);
+    setTimeout(() => {
+      this.activate();
+      console.log("Activating...");
+    }, 3000);
+    setTimeout(() => {
+      this.activate();
+      console.log("DEActivating...");
+    }, 4000);
   }
 
   private gpio;
