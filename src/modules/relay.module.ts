@@ -1,10 +1,11 @@
 import { Gpio as GPIO, BinaryValue } from "onoff";
 
-export class Relay extends GPIO {
+export class Relay {
   constructor(number: number) {
-    super(number, "out");
+    this.gpio = new GPIO(number, "out");
   }
 
+  private gpio;
   private mutable = true;
 
   /**
@@ -45,7 +46,7 @@ export class Relay extends GPIO {
    * @returns Whether or not the GPIO port is active.
    */
   isActive(): boolean {
-    return !this.readSync();
+    return !this.gpio.readSync();
   }
 
   /**
@@ -56,7 +57,7 @@ export class Relay extends GPIO {
    */
   setActive(state: boolean, override: boolean = false) {
     if (!this.mutable && !override) return false;
-    this.writeSync(+state as BinaryValue);
+    this.gpio.writeSync(+state as BinaryValue);
     return true;
   }
 }
