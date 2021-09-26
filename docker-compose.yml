@@ -1,0 +1,25 @@
+version: "3"
+services:
+  database:
+    image: postgres:13.3-alpine
+    environment:
+      - POSTGRES_USER=${PGUSER:-defaultUser}
+      - POSTGRES_PASSWORD=${PGPASSWORD:-defaultPassword}
+      - POSTGRES_DB=${PGDATABASE:-defaultDatabase}
+      - SESSION_SECRET=${SECRET:-defaultSecret}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+  api:
+    build: .
+    command: npm run deploy:server
+    volumes:
+      - .:/home/node
+      - /home/node/node_modules
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://${PGUSER:-defaultUser}:${PGPASSWORD:-defaultPassword}@database/${PGDATABASE:-defaultDatabase}

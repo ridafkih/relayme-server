@@ -2,22 +2,36 @@
   "name": "server-relay",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src",
-    "test": "esr src"
+    "start": "node .",
+    "setup": "npm ci",
+    "dev": "docker-compose down && npm run deploy:database && nodemon",
+    "build": "docker-compose build",
+    "build:dev": "tsc",
+    "deploy": "docker-compose up -d",
+    "deploy:server": "npm run dev",
+    "deploy:database": "docker-compose up -d database",
+    "stop": "docker-compose down",
+    "obliterate": "docker-compose down --rmi all && docker-compose rm -s -f"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bindings": "^1.5.0",
+    "chalk": "^4.1.2",
     "express": "^4.17.1",
-    "onoff": "^6.0.3"
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
+    "onoff": "^6.0.3",
+    "pg": "^8.7.1",
+    "pg-format": "^1.0.4",
+    "uuid": "^8.3.2",
+    "ws": "^8.2.2"
   },
   "devDependencies": {
-    "esbuild": "^0.13.2",
-    "esbuild-runner": "^2.2.1",
+    "@types/express-session": "^1.17.4",
     "ts-node": "^10.2.1",
     "tsc": "^2.0.3",
     "tsc-alias": "^1.3.9",

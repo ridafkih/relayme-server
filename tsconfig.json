@@ -8,7 +8,11 @@
     "rootDir": "src",
     "outDir": "dist",
     "paths": {
-      "@modules/*": ["modules/*"]
+      "@modules/*": ["modules/*"],
+      "@typings/*": ["typings/*"],
+      "@routes/*": ["routes/*"],
+      "@helpers/*": ["helpers/*"],
+      "@middleware/*": ["middleware/*"]
     }
   }
 }
