@@ -12,7 +12,8 @@
       "@typings/*": ["typings/*"],
       "@routes/*": ["routes/*"],
       "@helpers/*": ["helpers/*"],
-      "@middleware/*": ["middleware/*"]
+      "@middleware/*": ["middleware/*"],
+      "@services/*": ["services/*"]
     }
   }
 }
