@@ -1,5 +1,4 @@
 import * as express from "express";
-import Database from "@modules/database";
 
 import globalMiddlewares from "@middleware/global";
 import { logError, logNotification } from "@helpers/logger";
@@ -12,10 +11,7 @@ declare module "express-session" {
 }
 
 export default class App {
-  constructor(
-    public readonly database: Database,
-    private readonly app = express()
-  ) {
+  constructor(private readonly app = express()) {
     this.app.use(...globalMiddlewares);
   }
 
@@ -59,7 +55,6 @@ export default class App {
    */
   public async initialize(forcedPort?: number): Promise<App> {
     const port = forcedPort || process.env.PORT || 8080;
-    await this.database.initialize();
     return new Promise((resolve, reject) => {
       this.app.listen(port, () => {
         logNotification(`listening on 0.0.0.0:${port}`);
