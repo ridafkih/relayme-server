@@ -15,7 +15,7 @@
     "stop": "docker-compose down",
     "obliterate": "docker-compose down --rmi all && docker-compose rm -f",
     "prisma:deploy": "docker-compose -f ./docker-compose.prisma.yml -p prisma up -d prisma",
-    "prisma:pull": "npm run prisma:deploy && sleep 2 && prisma db pull && docker rm -f prisma"
+    "prisma:pull": "npm run prisma:deploy && sleep 2 && prisma db pull && docker rm -f prisma && prisma generate"
   },
   "keywords": [],
   "author": "",
