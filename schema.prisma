@@ -1,8 +1,24 @@
-datasource db {
-    url      = env("DATABASE_URL")
-    provider = "postgresql"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model users {
+  uuid      String  @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  email     String  @unique
+  full_name String? @db.VarChar(50)
+  avatar    String? @db.VarChar(255)
+  auth      auth[]
+}
+
+model auth {
+  id    Int     @id @default(autoincrement())
+  uuid  String? @db.Uuid
+  hash  String  @db.Char(60)
+  salt  String  @db.Char(29)
+  users users?  @relation(fields: [uuid], references: [uuid], onDelete: NoAction, onUpdate: NoAction)
 }

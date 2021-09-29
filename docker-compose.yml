@@ -1,6 +1,7 @@
 version: "3"
 services:
   database:
+    container_name: database
     image: postgres:13.3-alpine
     environment:
       - POSTGRES_USER=${PGUSER:-defaultUser}
@@ -12,6 +13,7 @@ services:
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
   api:
+    container_name: api
     build: .
     command: npm run deploy:server
     volumes:

@@ -10,12 +10,12 @@
     "build": "docker-compose build",
     "build:dev": "tsc",
     "deploy": "docker-compose up -d",
-    "deploy:server": "npm run dev",
+    "deploy:server": "nodemon",
     "deploy:database": "docker-compose up -d database",
     "stop": "docker-compose down",
     "obliterate": "docker-compose down --rmi all && docker-compose rm -s -f",
-    "prisma:deploy": "POSTGRES_USER=prisma POSTGRES_PASSWORD=prisma POSTGRES_DB=prisma && docker-compose up -d database -p prisma",
-    "prisma:pull": "prisma:deploy && prisma db pull"
+    "prisma:deploy": "docker-compose -f ./docker-compose.prisma.yml up -d prisma",
+    "prisma:pull": "npm run prisma:deploy && prisma db pull && docker stop prisma"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/express-session": "^1.17.4",
+    "nodemon": "^2.0.13",
     "prisma": "^3.1.1",
     "ts-node": "^10.2.1",
     "tsc-alias": "^1.3.9",
