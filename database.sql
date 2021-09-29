@@ -13,3 +13,9 @@ CREATE TABLE IF NOT EXISTS auth (
 	hash CHAR(60) NOT NULL,
 	salt CHAR(29) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS devices (
+  id SERIAL PRIMARY KEY,
+  uuid UUID REFERENCES users(uuid),
+  secret CHAR(128) NOT NULL
+);
