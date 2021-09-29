@@ -8,11 +8,12 @@ datasource db {
 }
 
 model users {
-  uuid      String  @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
-  email     String  @unique
-  full_name String? @db.VarChar(50)
-  avatar    String? @db.VarChar(255)
+  uuid      String    @id @default(dbgenerated("uuid_generate_v1()")) @db.Uuid
+  email     String    @unique
+  full_name String?   @db.VarChar(50)
+  avatar    String?   @db.VarChar(255)
   auth      auth[]
+  devices   devices[]
 }
 
 model auth {
@@ -21,4 +22,11 @@ model auth {
   hash  String  @db.Char(60)
   salt  String  @db.Char(29)
   users users?  @relation(fields: [uuid], references: [uuid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model devices {
+  id     Int     @id @default(autoincrement())
+  uuid   String? @db.Uuid
+  secret String  @db.Char(128)
+  users  users?  @relation(fields: [uuid], references: [uuid], onDelete: NoAction, onUpdate: NoAction)
 }
