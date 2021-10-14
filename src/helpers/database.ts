@@ -8,8 +8,6 @@ const {
   DATABASE_URL = `postgres://${PGUSER}:${PGPASSWORD}@localhost:5432/${PGDATABASE}`,
 } = process.env;
 
-console.log(DATABASE_URL);
-
 const prisma = new PrismaClient({
   datasources: { db: { url: DATABASE_URL } },
 });
