@@ -8,7 +8,7 @@ export const rejectNoAuth: ExpressMiddleware = (
   next: NextFunction
 ) => {
   const { session } = req;
-  if (!session.user)
+  if (!session.user?.uuid)
     unauthorized(res, "You must be authorized to access this resource.");
   else next();
 };
@@ -19,7 +19,7 @@ export const rejectAuth: ExpressMiddleware = (
   next: NextFunction
 ) => {
   const { session } = req;
-  if (session.user)
+  if (session.user?.uuid)
     unauthorized(res, "You do not have permission to access this resource.");
   else next();
 };
