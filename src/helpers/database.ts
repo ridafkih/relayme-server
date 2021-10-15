@@ -1,7 +1,10 @@
 import { generateDeviceIdentifier } from "@helpers/identity";
 import { PrismaClient } from "@prisma/client";
 import { AuthErrors } from "@typings/Errors";
-import { generateSaltHashPair } from "@helpers/authentication";
+import {
+  checkHashedPassword,
+  generateSaltHashPair,
+} from "@helpers/authentication";
 
 const {
   PGUSER = "defaultUser",
@@ -13,6 +16,30 @@ const {
 const prisma = new PrismaClient({
   datasources: { db: { url: DATABASE_URL } },
 });
+
+interface UserRegistrationInterface {
+  email: string;
+  avatar: string;
+  full_name: string;
+  password: string;
+}
+
+interface UserLoginInterface {
+  email: string;
+  password: string;
+}
+
+export const getUuidByLoginCredentials = async (
+  userLogin: UserLoginInterface
+) => {
+  const { email, password } = userLogin;
+
+  const { uuid } = await prisma.users.findFirst({ where: { email } });
+  const { hash } = await prisma.auth.findFirst({ where: { uuid } });
+
+  const authorized = checkHashedPassword(password, hash);
+  return authorized ? uuid : null;
+};
 
 /**
  * Registers a new device into the database.
@@ -29,13 +56,6 @@ export const registerNewDevice = (uuid?: string) => {
       return { uuid, secret };
     });
 };
-
-interface UserRegistrationInterface {
-  email: string;
-  avatar: string;
-  full_name: string;
-  password: string;
-}
 
 /**
  * Checks whether the user exists in the database.
