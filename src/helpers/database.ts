@@ -1,8 +1,7 @@
 import { generateDeviceIdentifier } from "@helpers/identity";
 import { PrismaClient } from "@prisma/client";
-import { generateSaltHashPair } from "./authentication";
-
-const SALT_ROUNDS = 20000;
+import { AuthErrors } from "@typings/Errors";
+import { generateSaltHashPair } from "@helpers/authentication";
 
 const {
   PGUSER = "defaultUser",
@@ -34,24 +33,39 @@ export const registerNewDevice = (uuid?: string) => {
 interface UserRegistrationInterface {
   email: string;
   avatar: string;
-  fullName: string;
+  full_name: string;
   password: string;
 }
 
+/**
+ * Checks whether the user exists in the database.
+ * @param email The email to check for in the database
+ * @returns Whether or not the user exists.
+ */
+export const doesUserExist = async (email: string) => {
+  const user = await prisma.users.findUnique({ where: { email } });
+  return !!user;
+};
+
+/**
+ * Registers a new user to the database, and returns the user UUID on success.
+ * @param userRegistration The user registration object.
+ * @returns A string containing the UUID of the new user.
+ */
 export const registerNewUser = async (
   userRegistration: UserRegistrationInterface
 ) => {
-  const { email, avatar, password, fullName: full_name } = userRegistration;
-  const { salt, hash } = await generateSaltHashPair(password, SALT_ROUNDS);
+  const { email, avatar, password, full_name } = userRegistration;
+
+  const isUserRegistered = await doesUserExist(email);
+  if (isUserRegistered) throw Error(AuthErrors.ALREADY_REGISTERED);
+
+  const { salt, hash } = await generateSaltHashPair(password);
 
   const auth = { create: { salt, hash } };
-
-  return prisma.users.create({
-    data: {
-      email,
-      avatar,
-      full_name,
-      auth,
-    },
+  const { uuid } = await prisma.users.create({
+    data: { email, avatar, full_name, auth },
   });
+
+  return uuid;
 };
