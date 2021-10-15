@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
 import App from "@modules/app";
-import Endpoint from "@typings/Route";
+import Route from "@typings/Route";
 import { success } from "@helpers/response";
 
-export const getVersion: Endpoint = {
+export const getVersion: Route = {
   name: "get:version",
   method: "get",
   path: `/version`,

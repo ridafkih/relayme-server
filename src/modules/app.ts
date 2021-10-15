@@ -4,7 +4,7 @@ import globalMiddlewares from "@middleware/global";
 import { logError, logNotification } from "@helpers/logger";
 
 import AuthenticatedUser from "@typings/AuthenticatedUser";
-import Endpoint from "@typings/Route";
+import Route from "@typings/Route";
 
 declare module "express-session" {
   interface Session {
@@ -20,7 +20,7 @@ export default class App {
   /**
    * Registers the provided endpoint based on
    * the endpoint object.
-   * @param endpoint - The endpoint object.
+   * @param route - The route object.
    */
   public registerEndpoint({
     name,
@@ -29,13 +29,13 @@ export default class App {
     validation = [],
     middleware = [],
     callback,
-  }: Endpoint): void {
+  }: Route): void {
     try {
       const appCallback = callback.bind(this);
       this.app[method](path, ...validation, ...middleware, appCallback);
       logNotification(`${name} endpoint registered at ${path}`);
     } catch (error) {
-      logError(`error registering endpoint ${name} at ${path}`, error);
+      logError(`error registering route ${name} at ${path}`, error);
     }
   }
 
@@ -43,7 +43,7 @@ export default class App {
    * Registers an array of endpoint objects.
    * @param endpoints - An array of endpoint objects.
    */
-  public registerEndpoints(endpoints: Endpoint[]): void {
+  public registerEndpoints(endpoints: Route[]): void {
     endpoints.forEach((endpoint) => {
       this.registerEndpoint(endpoint);
     });

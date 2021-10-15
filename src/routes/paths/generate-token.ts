@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 
 import App from "@modules/app";
-import Endpoint from "@typings/Route";
+import Route from "@typings/Route";
 import { registerNewDevice } from "@helpers/database";
 import { success } from "@helpers/response";
 import { rejectNoAuth } from "@middleware/authentication";
 
-export const generateToken: Endpoint = {
+export const generateToken: Route = {
   name: "post:generate-token",
   method: "post",
   middleware: [rejectNoAuth],
