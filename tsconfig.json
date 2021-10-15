@@ -8,24 +8,12 @@
     "rootDir": "src",
     "outDir": "dist",
     "paths": {
-      "@modules/*": [
-        "modules/*"
-      ],
-      "@typings/*": [
-        "typings/*"
-      ],
-      "@routes/*": [
-        "routes/*"
-      ],
-      "@helpers/*": [
-        "helpers/*"
-      ],
-      "@middleware/*": [
-        "middleware/*"
-      ],
-      "@services/*": [
-        "services/*"
-      ]
+      "@modules/*": ["modules/*"],
+      "@typings/*": ["typings/*"],
+      "@routes/*": ["routes/*"],
+      "@helpers/*": ["helpers/*"],
+      "@middleware/*": ["middleware/*"],
+      "@services/*": ["services/*"]
     }
   }
 }
