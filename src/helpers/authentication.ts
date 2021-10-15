@@ -1,9 +1,19 @@
 import * as bcrypt from "bcrypt";
+import { Request } from "express";
 
 interface SaltHashPair {
   salt: string;
   hash: string;
 }
+
+/**
+ * Sets the user session for the user.
+ * @param req The request for the relevant request.
+ * @param uuid The UUID of the user.
+ */
+export const setSession = (req: Request, uuid: string) => {
+  req.session.user.uuid = uuid;
+};
 
 /**
  * Compares a password with a hash.

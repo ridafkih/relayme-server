@@ -8,6 +8,7 @@ import { validate } from "@middleware/validation";
 import { rejectAuth } from "@middleware/authentication";
 import { conflict, internalServerError, success } from "@helpers/response";
 import { AuthErrors } from "@typings/Errors";
+import { setSession } from "@helpers/authentication";
 
 export const postRegister: Route = {
   name: "post:register",
@@ -49,7 +50,10 @@ export const postRegister: Route = {
   middleware: [validate, rejectAuth],
   callback: async function (this: App, req: Request, res: Response) {
     registerNewUser(req.body)
-      .then((uuid) => success(res, { uuid }))
+      .then((uuid) => {
+        success(res, { uuid });
+        setSession(req, uuid);
+      })
       .catch(({ message: error }: Error) => {
         if (error === AuthErrors.ALREADY_REGISTERED) conflict(res, error);
         else internalServerError(res, error);
