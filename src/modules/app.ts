@@ -3,12 +3,11 @@ import * as express from "express";
 import globalMiddlewares from "@middleware/global";
 import { logError, logNotification } from "@helpers/logger";
 
-import AuthenticatedUser from "@typings/AuthenticatedUser";
 import Route from "@typings/Route";
 
 declare module "express-session" {
   interface Session {
-    user: AuthenticatedUser;
+    user: string;
   }
 }
 
